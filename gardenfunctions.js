@@ -5,16 +5,23 @@ function display_form() {
     document.getElementById('plantForm').style.display = 'block';
 }
 
-function show_info() {
-    var plant = this.innerHTML;
+function show_info(plant) {
+    console.log("show_info");
     var plantDataString = localStorage.getItem(plant);
     var plantData = JSON.parse(plantDataString);
-    console.log(plantData.age);
     document.getElementById('Name').innerHTML = plantData.plant;
     document.getElementById('Type').innerHTML = plantData.type;
     document.getElementById('Age').innerHTML = plantData.age;
     document.getElementById('Schedule').innerHTML = plantData.water;
     document.getElementById('Notes').innerHTML = plantData.notes;
+    if (plantData.records) {
+        for (var key in plantData.records) {
+            var record = document.createElement('div');
+            record.id='record';
+            record.innerHTML = key + ' - ' + plantData.records[key];
+            document.getElementById('Records').appendChild(record);
+        }
+    }
     document.getElementById('plantInfo').style.display = 'block';
 }
 
@@ -45,25 +52,27 @@ function store_info(event) {
         type: type,
         age: age,
         water: water,
-        notes: notes
+        notes: notes,
+        records: {}
     };
 
     var existingButton = document.getElementById(plant);
 
-    if (existingButton) {
-        console.log("Plant exists. Replacing the button.");
-        document.getElementById('plantTabs').removeChild(existingButton); // Remove old button
+    if (!existingButton) {
+        var plantDataString = JSON.stringify(plantData);
     }
-
-    var plantDataString = JSON.stringify(plantData);
+    else {
+        document.getElementById('plantTabs').removeChild(existingButton);
+    }
     const tab=document.createElement('button');
-    tab.innerHTML = plant;
+    tab.innerHTML = plant+" - "+type;
     tab.id = plant;
     tab.className='tab';
-    tab.onclick = show_info
+    tab.onclick = show_info(plant);
     document.getElementById('plantTabs').appendChild(tab);
     localStorage.setItem(plant, plantDataString);
     document.getElementById('plantForm').style.display = 'none';
+    console.log(plantDataString);
 }
 
 function delete_info(){
@@ -75,4 +84,22 @@ function delete_info(){
     document.getElementById('plantForm').style.display = 'none';
 }
 
-// add functionality to keep adding new information (add record)
+function show_input(){
+    document.getElementById('plantRecord').style.display = 'block';
+}
+
+function add_record(event){
+    event.preventDefault();
+    var plant = document.getElementById('Name').innerHTML;
+    var plantDataString = localStorage.getItem(plant);
+    var plantData = JSON.parse(plantDataString);
+    var val=document.getElementById('addRecord').value;
+    const dateData=new Date();
+    let date=dateData.getDate()+'/'+dateData.getMonth()+'/'+dateData.getFullYear()+' '+dateData.getHours()+':'+dateData.getMinutes();
+    plantData.records[date]=val;
+    plantDataString = JSON.stringify(plantData);
+    localStorage.setItem(plant, plantDataString);
+    document.getElementById('plantRecord').style.display = 'none';
+    console.log(plantDataString);
+    show_info(plant);
+}

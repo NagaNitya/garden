@@ -30,10 +30,15 @@
                 <p id="Age"></p>
                 <p id="Schedule"></p>
                 <p id="Notes"></p>
+                <div id="Records"></div>
                 <button onclick="edit_info(event)">edit</button>
                 <button onclick="delete_info()">delete log</button>
-                <button onclick="add_record()">add new record</button>
+                <button onclick="show_input()">add new record</button>
             </div>
+            <form id="plantRecord" style="display: none;">
+                <input type="text" id="addRecord" required>
+                <button onclick="add_record(event)">Add</button>
+            </form>
         </div>
     </body>
 </html>
