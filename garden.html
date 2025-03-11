@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Plant Diary</title>
+        <link rel="stylesheet" href="garden.css">
+        <script src="gardenfunctions.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <aside>
+            <button onclick="display_form()">New Log</button>
+            <div id="plantTabs"></div>
+        </aside>
+        <div id="main_content">
+            <h1>Welcome to your personal plant diary!</h1>
+            <p>Use this diary to keep track of your plants and their care! Click on 'new log' to give it a go!</p>
+            <form id="plantForm" style="display: none;">
+                <input type="text" id="plantName" placeholder="Plant Name" required>
+                <input type="text" id="plantType" placeholder="Plant Type" required>
+                <input type="number" id="plantAge" placeholder="Plant Age" required>
+                <input type="text" id="wateringSchedule" placeholder="Watering Schedule" required>
+                <input type="text" placeholder="additional information" id="plantNotes">
+                <button onclick="store_info(event)" id="submitInfo">Add Plant</button>
+            </form>
+            <div id="plantInfo" style="display: none;">
+                <h2>Plant Information</h2>
+                <p id="Name"></p>
+                <p id="Type"></p>
+                <p id="Age"></p>
+                <p id="Schedule"></p>
+                <p id="Notes"></p>
+                <button onclick="edit_info(event)">edit</button>
+                <button onclick="delete_info()">delete log</button>
+                <button onclick="add_record()">add new record</button>
+            </div>
+        </div>
+    </body>
+</html>

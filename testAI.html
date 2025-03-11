@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plant Logs</title>
+  <style>
+    .tab {
+      cursor: pointer;
+      background-color: #e0f7fa;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #00796b;
+    }
+    .content {
+      display: none;
+      background-color: #ffffff;
+      padding: 10px;
+      border: 1px solid #00796b;
+    }
+  </style>
+</head>
+<body>
+  <h1>Plant Logger</h1>
+  <form id="plantForm">
+    <input type="text" id="plantName" placeholder="Plant Name" required>
+    <input type="number" id="plantAge" placeholder="Plant Age" required>
+    <input type="text" id="wateringSchedule" placeholder="Watering Schedule" required>
+    <button type="submit">Add Plant</button>
+  </form>
+  <div id="plantTabs"></div>
+
+  <script>
+    const form = document.getElementById('plantForm');
+    const plantTabs = document.getElementById('plantTabs');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('plantName').value;
+      const age = document.getElementById('plantAge').value;
+      const schedule = document.getElementById('wateringSchedule').value;
+
+      const tab = document.createElement('div');
+      tab.className = 'tab';
+      tab.textContent = name;
+
+      const content = document.createElement('div');
+      content.className = 'content';
+      content.innerHTML = `<p>Age: ${age}</p><p>Watering Schedule: ${schedule}</p>`;
+
+      tab.addEventListener('click', () => {
+        content.style.display = content.style.display === 'none' ? 'block' : 'none';
+      });
+
+      plantTabs.appendChild(tab);
+      plantTabs.appendChild(content);
+      form.reset();
+    });
+  </script>
+</body>
+</html>
