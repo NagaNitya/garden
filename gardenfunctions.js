@@ -1,5 +1,22 @@
 let uniq=0; // unique identifieer for each plant
 
+document.addEventListener("DOMContentLoaded", function () {
+    // Prevent form submissions globally
+    document.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevents the form submission (and reload)
+        console.log("Form submission prevented globally!");
+    });
+
+    // Prevent links with href="#" from reloading the page
+    document.addEventListener("click", function (event) {
+        if (event.target.tagName === "A" && event.target.getAttribute("href") === "#") {
+            event.preventDefault(); // Stops the link's default behavior
+            console.log("Link click prevented!");
+        }
+    });
+});
+
+
 function display_form() {
     if (document.getElementById('plantInfo').style.display == 'block') {
         document.getElementById('plantInfo').style.display = 'none';
@@ -7,49 +24,22 @@ function display_form() {
     document.getElementById('plantForm').style.display = 'block';
 }
 
-function show_info(plant) {
-    console.log("show_info");
-    var plantDataString = localStorage.getItem(plant);
-    var plantData = JSON.parse(plantDataString);
-    console.log(plantDataString);
-    document.getElementById('Name').innerHTML = plantData.plant;
-    document.getElementById('Type').innerHTML = plantData.type;
-    document.getElementById('Age').innerHTML = plantData.age;
-    document.getElementById('Schedule').innerHTML = plantData.water;
-    document.getElementById('Notes').innerHTML = plantData.notes;
-    if (plantData.records) {
-        for (var key in plantData.records) {
-            var record = document.createElement('div');
-            record.id='record';
-            record.innerHTML = key + ' - ' + plantData.records[key];
-            document.getElementById('Records').appendChild(record);
-        }
-    }
-    document.getElementById('plantInfo').style.display = 'block';
+function cancel_form(){
+    document.getElementById('plantForm').reset();
+    document.getElementById('plantForm').style.display = 'none';
 }
 
-function edit_info(event) {
-    event.preventDefault();
-    var plant = document.getElementById('Name').innerHTML;
-    var plantDataString = localStorage.getItem(plant);
-    var plantData = JSON.parse(plantDataString);
-    document.getElementById('plantName').value = plantData.plant;
-    document.getElementById('plantType').value = plantData.type;
-    document.getElementById('plantAge').value = plantData.age;
-    document.getElementById('wateringSchedule').value = plantData.water;
-    document.getElementById('plantNotes').value = plantData.notes;
-    document.getElementById('submitInfo').innerHTML = 'edit';
-    document.getElementById('plantInfo').style.display = 'none';
-    document.getElementById('plantForm').style.display = 'block';
-}
+function store_info(event){
+    event.preventDefault; // prevent reloading of page
 
-function store_info(event) {
-    event.preventDefault();
+    // get the values from the form
     var plant = document.getElementById('plantName').value;
     var type = document.getElementById('plantType').value;
     var age = document.getElementById('plantAge').value;
     var water= document.getElementById('wateringSchedule').value;
     var notes = document.getElementById('plantNotes').value;
+
+    // create a JSON object to store the values
     var plantData = {
         id: uniq,
         plant: plant,
@@ -59,64 +49,154 @@ function store_info(event) {
         notes: notes,
         records: {}
     };
+
+    // store the JSON object in local storage
     var plantDataString = JSON.stringify(plantData);
-    const tab=document.createElement('button');
+    localStorage.setItem(uniq, plantDataString);
+    uniq++; // increment the unique identifier
+
+    // create a button for the plant and add it to the plantTabs div
+    const tab=document.createElement('button'); //create the button
     tab.innerHTML = plant+" - "+type;
-    tab.id = plant;
-    tab.className='tab';
+    tab.id=plantData.id;
+    tab.onclick = () => show_info(plantData.id);
     document.getElementById('plantTabs').appendChild(tab);
-    localStorage.setItem(plant, plantDataString);
-    tab.onclick = () => show_info(plant);
+    
+    // clear the form
     document.getElementById('plantForm').style.display = 'none';
     document.getElementById('plantName').value = '';
     document.getElementById('plantType').value = '';
     document.getElementById('plantAge').value = '';
     document.getElementById('wateringSchedule').value = '';
     document.getElementById('plantNotes').value = '';
-    console.log(localStorage.getItem(plant));
 }
 
-function edit_info(){
-    var plant = document.getElementById('Name').innerHTML;
-    var plantDataString = localStorage.getItem(plant);
+function show_info(plant_id) {
+    console.log("show_info"); // for debugging
+    var plantDataString = localStorage.getItem(plant_id); // get the plant data from local storage
     var plantData = JSON.parse(plantDataString);
-    plantData.plant = document.getElementById('plantName').value;
-    plantData.type = document.getElementById('plantType').value;
-    plantData.age = document.getElementById('plantAge').value;
-    plantData.water = document.getElementById('wateringSchedule').value;
-    plantData.notes = document.getElementById('plantNotes').value;
-    plantDataString = JSON.stringify(plantData);
-    localStorage.setItem(plant, plantDataString);
-    document.getElementById('plantInfo').style.display = 'none';
-    document.getElementById('plantForm').style.display = 'none';
-    console.log(localStorage.getItem(plant));
+    console.log(plantDataString); // for debugging
+
+    // display the plant data in the plantInfo div
+    document.getElementById('Name').innerHTML = plantData.plant;
+    document.getElementById('Type').innerHTML = plantData.type;
+    document.getElementById('Age').innerHTML = plantData.age;
+    document.getElementById('Schedule').innerHTML = plantData.water;
+    document.getElementById('Notes').innerHTML = plantData.notes;
+    let rec=document.getElementById('Records');
+    rec.innerHTML='';
+    if (plantData.records) {
+        for (var key in plantData.records) {
+            rec.innerHTML+=key + ' - ' + plantData.records[key]+'<br>';
+            //document.getElementById('plantRecords').appendChild(record);
+        }
+    }
+
+    // create buttons for editing, deleting, and adding records
+    var edit_button=document.createElement('button');
+    edit_button.innerHTML='edit';
+    if (document.getElementById('editButton')) {
+        document.getElementById('plantInfo').removeChild(document.getElementById('editButton'));
+    }
+    edit_button.onclick = () => edit_info(plantData.id, event);
+    edit_button.id='editButton';
+    document.getElementById('plantInfo').appendChild(edit_button);
+
+    var delete_button=document.createElement('button');
+    delete_button.innerHTML='delete';
+    if (document.getElementById('deleteButton')) {
+        document.getElementById('plantInfo').removeChild(document.getElementById('deleteButton'));
+    }
+    delete_button.onclick = () => delete_info(plantData.id);
+    delete_button.id='deleteButton';
+    document.getElementById('plantInfo').appendChild(delete_button);
+
+    var add_record_button=document.createElement('button');
+    add_record_button.innerHTML='add record';
+    if (document.getElementById('addRecordButton')) {
+        document.getElementById('plantInfo').removeChild(document.getElementById('addRecordButton'));
+    }
+    add_record_button.onclick = () => show_input(plantData.id);
+    add_record_button.id='addRecordButton';
+    document.getElementById('plantInfo').appendChild(add_record_button);
+
+    document.getElementById('plantInfo').style.display = 'block';
 }
 
-function delete_info(){
-    var plant = document.getElementById('Name').innerHTML;
-    localStorage.removeItem(plant);
+function edit_info(id, event) {
+    event.preventDefault();
+
+    var plantDataString = localStorage.getItem(id);
+    var plantData = JSON.parse(plantDataString);
+    document.getElementById('plantName').value = plantData.plant;
+    document.getElementById('plantType').value = plantData.type;
+    document.getElementById('plantAge').value = plantData.age;
+    document.getElementById('wateringSchedule').value = plantData.water;
+    document.getElementById('plantNotes').value = plantData.notes;
+    document.getElementById('submitInfo').innerHTML = 'edit';
+    document.getElementById('submitInfo').onclick = () => store_edited_info(id, event);
     document.getElementById('plantInfo').style.display = 'none';
-    var button = document.getElementById(plant);
+    document.getElementById('plantForm').style.display = 'block';
+}
+
+function store_edited_info(id, event){
+    event.preventDefault();
+
+    var plant = document.getElementById('plantName').value;
+    var type = document.getElementById('plantType').value;
+    var age = document.getElementById('plantAge').value;
+    var water= document.getElementById('wateringSchedule').value;
+    var notes = document.getElementById('plantNotes').value;
+    var plantData = {
+        id: id,
+        plant: plant,
+        type: type,
+        age: age,
+        water: water,
+        notes: notes,
+        records: {}
+    };
+    var plantDataString = JSON.stringify(plantData);
+    localStorage.setItem(id, plantDataString);
+
+    // replace button in plantTabs with new one
+    var button = document.getElementById(id);
+    button.innerHTML = plant+" - "+type;
+
+    document.getElementById('plantForm').style.display = 'none';
+}
+
+function delete_info(id){
+    localStorage.removeItem(id);
+    document.getElementById('plantInfo').style.display = 'none';
+    var button = document.getElementById(id);
     document.getElementById('plantTabs').removeChild(button);
     document.getElementById('plantForm').style.display = 'none';
 }
 
-function show_input(){
+function show_input(plant_id){
     document.getElementById('plantRecord').style.display = 'block';
+    document.getElementById('addNewRecord').onclick = () => add_record(plant_id, event);
+    document.getElementById('cancelRecord').onclick = function () {
+        document.getElementById('addRecord').value = '';
+        document.getElementById('plantRecord').style.display = 'none';
+    };
 }
 
-function add_record(event){
+function add_record(id, event){
     event.preventDefault();
-    var plant = document.getElementById('Name').innerHTML;
-    var plantDataString = localStorage.getItem(plant);
+    var plantDataString = localStorage.getItem(id);
     var plantData = JSON.parse(plantDataString);
     var val=document.getElementById('addRecord').value;
     const dateData=new Date();
-    let date=dateData.getDate()+'/'+dateData.getMonth()+'/'+dateData.getFullYear()+' '+dateData.getHours()+':'+dateData.getMinutes();
+    let date=dateData.getDate()+'/'+dateData.getMonth()+'/'+dateData.getFullYear()+' '+dateData.getHours()+':'+dateData.getMinutes()+':'+dateData.getSeconds();
+    console.log(plantData.records);
     plantData.records[date]=val;
     plantDataString = JSON.stringify(plantData);
-    localStorage.setItem(plant, plantDataString);
+    localStorage.setItem(id, plantDataString);
+    document.getElementById('addRecord').value = '';
     document.getElementById('plantRecord').style.display = 'none';
     console.log(plantDataString);
-    show_info(plant);
+    show_info(id);
 }
+

@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
     <head>
         <title>Plant Diary</title>
@@ -15,14 +14,17 @@
         <div id="main_content">
             <h1>Welcome to your personal plant diary!</h1>
             <p>Use this diary to keep track of your plants and their care! Click on 'new log' to give it a go!</p>
+
             <form id="plantForm" style="display: none;">
-                <input type="text" id="plantName" placeholder="Plant Name" required>
-                <input type="text" id="plantType" placeholder="Plant Type" required>
-                <input type="number" id="plantAge" placeholder="Plant Age" required>
-                <input type="text" id="wateringSchedule" placeholder="Watering Schedule" required>
+                <input type="text" id="plantName" placeholder="Plant Name">
+                <input type="text" id="plantType" placeholder="Plant Type">
+                <input type="number" id="plantAge" placeholder="Plant Age">
+                <input type="text" id="wateringSchedule" placeholder="Watering Schedule">
                 <input type="text" placeholder="additional information" id="plantNotes">
-                <button onclick="store_info(event)" id="submitInfo">Add Plant</button>
+                <button type="submit" onclick="store_info(event)" id="submitInfo">Add Plant</button>
+                <button id="cancelInfo" onclick="cancel_form()">Cancel</button>
             </form>
+
             <div id="plantInfo" style="display: none;">
                 <h2>Plant Information</h2>
                 <p id="Name"></p>
@@ -31,13 +33,13 @@
                 <p id="Schedule"></p>
                 <p id="Notes"></p>
                 <div id="Records"></div>
-                <button onclick="edit_info(event)">edit</button>
-                <button onclick="delete_info()">delete log</button>
-                <button onclick="show_input()">add new record</button>
             </div>
+
             <form id="plantRecord" style="display: none;">
-                <input type="text" id="addRecord" required>
-                <button onclick="add_record(event)">Add</button>
+                <textarea id="addRecord"></textarea>
+                <!-- <input type="text" id="addRecord" required> -->
+                <button type="submit" id="addNewRecord">Add</button>
+                <button id="cancelRecord">Cancel</button>
             </form>
         </div>
     </body>
