@@ -1,3 +1,5 @@
+let uniq=0; // unique identifieer for each plant
+
 function display_form() {
     if (document.getElementById('plantInfo').style.display == 'block') {
         document.getElementById('plantInfo').style.display = 'none';
@@ -9,6 +11,7 @@ function show_info(plant) {
     console.log("show_info");
     var plantDataString = localStorage.getItem(plant);
     var plantData = JSON.parse(plantDataString);
+    console.log(plantDataString);
     document.getElementById('Name').innerHTML = plantData.plant;
     document.getElementById('Type').innerHTML = plantData.type;
     document.getElementById('Age').innerHTML = plantData.age;
@@ -48,6 +51,7 @@ function store_info(event) {
     var water= document.getElementById('wateringSchedule').value;
     var notes = document.getElementById('plantNotes').value;
     var plantData = {
+        id: uniq,
         plant: plant,
         type: type,
         age: age,
@@ -55,24 +59,37 @@ function store_info(event) {
         notes: notes,
         records: {}
     };
-
-    var existingButton = document.getElementById(plant);
-
-    if (!existingButton) {
-        var plantDataString = JSON.stringify(plantData);
-    }
-    else {
-        document.getElementById('plantTabs').removeChild(existingButton);
-    }
+    var plantDataString = JSON.stringify(plantData);
     const tab=document.createElement('button');
     tab.innerHTML = plant+" - "+type;
     tab.id = plant;
     tab.className='tab';
-    tab.onclick = show_info(plant);
     document.getElementById('plantTabs').appendChild(tab);
     localStorage.setItem(plant, plantDataString);
+    tab.onclick = () => show_info(plant);
     document.getElementById('plantForm').style.display = 'none';
-    console.log(plantDataString);
+    document.getElementById('plantName').value = '';
+    document.getElementById('plantType').value = '';
+    document.getElementById('plantAge').value = '';
+    document.getElementById('wateringSchedule').value = '';
+    document.getElementById('plantNotes').value = '';
+    console.log(localStorage.getItem(plant));
+}
+
+function edit_info(){
+    var plant = document.getElementById('Name').innerHTML;
+    var plantDataString = localStorage.getItem(plant);
+    var plantData = JSON.parse(plantDataString);
+    plantData.plant = document.getElementById('plantName').value;
+    plantData.type = document.getElementById('plantType').value;
+    plantData.age = document.getElementById('plantAge').value;
+    plantData.water = document.getElementById('wateringSchedule').value;
+    plantData.notes = document.getElementById('plantNotes').value;
+    plantDataString = JSON.stringify(plantData);
+    localStorage.setItem(plant, plantDataString);
+    document.getElementById('plantInfo').style.display = 'none';
+    document.getElementById('plantForm').style.display = 'none';
+    console.log(localStorage.getItem(plant));
 }
 
 function delete_info(){
