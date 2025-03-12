@@ -21,8 +21,8 @@
                 <input type="number" id="plantAge" placeholder="Plant Age">
                 <input type="text" id="wateringSchedule" placeholder="Watering Schedule">
                 <input type="text" placeholder="additional information" id="plantNotes">
-                <button type="submit" onclick="store_info(event)" id="submitInfo">Add Plant</button>
-                <button id="cancelInfo" onclick="cancel_form()">Cancel</button>
+                <button type="submit" onclick="save_log(event)" id="submitInfo">Add Plant</button>
+                <button id="cancelInfo" onclick="cancel_log()">Cancel</button>
             </form>
 
             <div id="plantInfo" style="display: none;">
@@ -37,7 +37,6 @@
 
             <form id="plantRecord" style="display: none;">
                 <textarea id="addRecord"></textarea>
-                <!-- <input type="text" id="addRecord" required> -->
                 <button type="submit" id="addNewRecord">Add</button>
                 <button id="cancelRecord">Cancel</button>
             </form>
