@@ -24,14 +24,12 @@ function display_form() {
     document.getElementById('plantForm').style.display = 'block';
 }
 
-function cancel_form(){
+function cancel_log(){
     document.getElementById('plantForm').reset();
     document.getElementById('plantForm').style.display = 'none';
 }
 
-function store_info(event){
-    event.preventDefault; // prevent reloading of page
-
+function save_log(){
     // get the values from the form
     var plant = document.getElementById('plantName').value;
     var type = document.getElementById('plantType').value;
@@ -71,7 +69,7 @@ function store_info(event){
     document.getElementById('plantNotes').value = '';
 }
 
-function show_info(plant_id) {
+function show_log(plant_id) {
     console.log("show_info"); // for debugging
     var plantDataString = localStorage.getItem(plant_id); // get the plant data from local storage
     var plantData = JSON.parse(plantDataString);
@@ -98,7 +96,7 @@ function show_info(plant_id) {
     if (document.getElementById('editButton')) {
         document.getElementById('plantInfo').removeChild(document.getElementById('editButton'));
     }
-    edit_button.onclick = () => edit_info(plantData.id, event);
+    edit_button.onclick = () => edit_log(plantData.id, event);
     edit_button.id='editButton';
     document.getElementById('plantInfo').appendChild(edit_button);
 
@@ -107,7 +105,7 @@ function show_info(plant_id) {
     if (document.getElementById('deleteButton')) {
         document.getElementById('plantInfo').removeChild(document.getElementById('deleteButton'));
     }
-    delete_button.onclick = () => delete_info(plantData.id);
+    delete_button.onclick = () => delete_log(plantData.id);
     delete_button.id='deleteButton';
     document.getElementById('plantInfo').appendChild(delete_button);
 
@@ -116,16 +114,14 @@ function show_info(plant_id) {
     if (document.getElementById('addRecordButton')) {
         document.getElementById('plantInfo').removeChild(document.getElementById('addRecordButton'));
     }
-    add_record_button.onclick = () => show_input(plantData.id);
+    add_record_button.onclick = () => show_record_input(plantData.id);
     add_record_button.id='addRecordButton';
     document.getElementById('plantInfo').appendChild(add_record_button);
 
     document.getElementById('plantInfo').style.display = 'block';
 }
 
-function edit_info(id, event) {
-    event.preventDefault();
-
+function edit_log(id) {
     var plantDataString = localStorage.getItem(id);
     var plantData = JSON.parse(plantDataString);
     document.getElementById('plantName').value = plantData.plant;
@@ -134,14 +130,12 @@ function edit_info(id, event) {
     document.getElementById('wateringSchedule').value = plantData.water;
     document.getElementById('plantNotes').value = plantData.notes;
     document.getElementById('submitInfo').innerHTML = 'edit';
-    document.getElementById('submitInfo').onclick = () => store_edited_info(id, event);
+    document.getElementById('submitInfo').onclick = () => save_edited_log(id, event);
     document.getElementById('plantInfo').style.display = 'none';
     document.getElementById('plantForm').style.display = 'block';
 }
 
-function store_edited_info(id, event){
-    event.preventDefault();
-
+function save_edited_log(id){
     var plant = document.getElementById('plantName').value;
     var type = document.getElementById('plantType').value;
     var age = document.getElementById('plantAge').value;
@@ -166,7 +160,7 @@ function store_edited_info(id, event){
     document.getElementById('plantForm').style.display = 'none';
 }
 
-function delete_info(id){
+function delete_log(id){
     localStorage.removeItem(id);
     document.getElementById('plantInfo').style.display = 'none';
     var button = document.getElementById(id);
@@ -174,7 +168,7 @@ function delete_info(id){
     document.getElementById('plantForm').style.display = 'none';
 }
 
-function show_input(plant_id){
+function show_record_input(plant_id){
     document.getElementById('plantRecord').style.display = 'block';
     document.getElementById('addNewRecord').onclick = () => add_record(plant_id, event);
     document.getElementById('cancelRecord').onclick = function () {
@@ -183,20 +177,19 @@ function show_input(plant_id){
     };
 }
 
-function add_record(id, event){
-    event.preventDefault();
+function add_record(id){
     var plantDataString = localStorage.getItem(id);
     var plantData = JSON.parse(plantDataString);
     var val=document.getElementById('addRecord').value;
     const dateData=new Date();
     let date=dateData.getDate()+'/'+dateData.getMonth()+'/'+dateData.getFullYear()+' '+dateData.getHours()+':'+dateData.getMinutes()+':'+dateData.getSeconds();
     console.log(plantData.records);
-    plantData.records[date]=val;
+    plantData.records[date]=val; 
     plantDataString = JSON.stringify(plantData);
     localStorage.setItem(id, plantDataString);
     document.getElementById('addRecord').value = '';
     document.getElementById('plantRecord').style.display = 'none';
     console.log(plantDataString);
-    show_info(id);
+    show_log(id);
 }
 
