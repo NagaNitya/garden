@@ -18,10 +18,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function display_form() {
-    if (document.getElementById('plantInfo').style.display == 'block') {
+    if (document.getElementById('plantInfo').style.display == 'flex') {
         document.getElementById('plantInfo').style.display = 'none';
     }
-    document.getElementById('plantForm').style.display = 'block';
+    document.getElementById('plantForm').style.display = 'flex';
+    document.getElementById('submitInfo').onclick = () => save_log();
 }
 
 function cancel_log(){
@@ -57,7 +58,7 @@ function save_log(){
     const tab=document.createElement('button'); //create the button
     tab.innerHTML = plant+" - "+type;
     tab.id=plantData.id;
-    tab.onclick = () => show_info(plantData.id);
+    tab.onclick = () => show_log(plantData.id);
     document.getElementById('plantTabs').appendChild(tab);
     
     // clear the form
@@ -67,6 +68,9 @@ function save_log(){
     document.getElementById('plantAge').value = '';
     document.getElementById('wateringSchedule').value = '';
     document.getElementById('plantNotes').value = '';
+
+    // display success messsage
+    alert('Plant added successfully');
 }
 
 function show_log(plant_id) {
@@ -98,6 +102,7 @@ function show_log(plant_id) {
     }
     edit_button.onclick = () => edit_log(plantData.id, event);
     edit_button.id='editButton';
+    edit_button.className='form_button';
     document.getElementById('plantInfo').appendChild(edit_button);
 
     var delete_button=document.createElement('button');
@@ -107,6 +112,7 @@ function show_log(plant_id) {
     }
     delete_button.onclick = () => delete_log(plantData.id);
     delete_button.id='deleteButton';
+    delete_button.className='form_button';
     document.getElementById('plantInfo').appendChild(delete_button);
 
     var add_record_button=document.createElement('button');
@@ -116,6 +122,7 @@ function show_log(plant_id) {
     }
     add_record_button.onclick = () => show_record_input(plantData.id);
     add_record_button.id='addRecordButton';
+    add_record_button.className='form_button';
     document.getElementById('plantInfo').appendChild(add_record_button);
 
     document.getElementById('plantInfo').style.display = 'block';
@@ -129,10 +136,9 @@ function edit_log(id) {
     document.getElementById('plantAge').value = plantData.age;
     document.getElementById('wateringSchedule').value = plantData.water;
     document.getElementById('plantNotes').value = plantData.notes;
-    document.getElementById('submitInfo').innerHTML = 'edit';
     document.getElementById('submitInfo').onclick = () => save_edited_log(id, event);
     document.getElementById('plantInfo').style.display = 'none';
-    document.getElementById('plantForm').style.display = 'block';
+    document.getElementById('plantForm').style.display = 'flex';
 }
 
 function save_edited_log(id){
@@ -156,7 +162,7 @@ function save_edited_log(id){
     // replace button in plantTabs with new one
     var button = document.getElementById(id);
     button.innerHTML = plant+" - "+type;
-
+    document.getElementById("plantForm").reset();
     document.getElementById('plantForm').style.display = 'none';
 }
 

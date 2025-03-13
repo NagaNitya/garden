@@ -1,8 +1,84 @@
+
 body{
     display: flex;
+    font-family: "Pompiere", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 25px;
+    overflow-y: hidden;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+aside{
+    display: block;
+    width: 15%;
+    overflow-y: auto;
+    height: 80vh;
+    background-color: red;
+    padding: 10px;
+    margin-right:50px;
+    border-radius: 10px;
+}
+
+.new_log_button{
+    font-family: "Pompiere", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 25px;
+    border: none;
+    background-color: red;
+}
+
+h1{
+    font-family: "Lavishly Yours", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 50px;
 }
 
 .main_content{
     display: block;
     width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
+.all_content{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: blue;
+    height: 62%;
+    border-radius: 10px;
+}
+
+.plant_form{
+    display: flex;
+    align-content: center;
+    margin: auto;
+    align-self: center;
+}
+
+.plant_form_labels{
+    display: block;
+    width: 50%;
+    padding: 10px;
+    text-align: right;
+}
+
+.plant_form_inputs{
+    display: block;
+    width: 50%;
+    padding: 10px;
+}
+
+.form_button{
+    font-family: "Pompiere", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    border: none;
+    background-color: yellow;
 }
