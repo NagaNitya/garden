@@ -5,41 +5,55 @@
         <link rel="stylesheet" href="garden.css">
         <script src="gardenfunctions.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Borel&family=Lavishly+Yours&family=Yesteryear&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Borel&family=Lavishly+Yours&family=Pompiere&family=Yesteryear&display=swap" rel="stylesheet">
     </head>
     <body>
         <aside>
-            <button onclick="display_form()">New Log</button>
+            <button onclick="display_form()" class="new_log_button">New Log</button>
             <div id="plantTabs"></div>
         </aside>
         <div id="main_content">
-            <h1>Welcome to your personal plant diary!</h1>
-            <p>Use this diary to keep track of your plants and their care! Click on 'new log' to give it a go!</p>
+            <h1>Welcome to your Personal Plant Journal!</h1>
+            <p>Use this journal to keep track of your plants and their care! Click on 'New Log' to give it a go!</p>
+            <div class="all_content">
+                <form id="plantForm" style="display: none;" class="plant_form"><br>
+                    <div class="plant_form_labels">
+                        <label for="plantName" class="plant_form_label">Enter the name of your plant: </label><br>
+                        <label for="plantType" class="plant_form_label">Enter the type/species: </label><br>
+                        <label for="plantAge" class="plant_form_label">Enter the age of your plant: </label><br>
+                        <label for="wateringSchedule" class="plant_form_label">Enter the watering schedule (in weeks): </label><br>
+                        <label for="plantNotes" class="plant_form_label">Enter any additional notes: </label><br>
+                    </div>
+                    <div class="plant_form_inputs">
+                        <input type="text" id="plantName" placeholder="Plant Name"><br>
+                        <input type="text" id="plantType" placeholder="Plant Type"><br>
+                        <input type="number" id="plantAge" placeholder="Plant Age"><br>
+                        <input type="text" id="wateringSchedule" placeholder="Watering Schedule"><br>
+                        <input type="text" placeholder="additional information" id="plantNotes"><br>
+                        <button type="submit" id="submitInfo" class="form_button">Save</button>
+                        <button id="cancelInfo" onclick="cancel_log()" class="form_button">Cancel</button>
+                    </div>
+                    
+                </form>
 
-            <form id="plantForm" style="display: none;">
-                <input type="text" id="plantName" placeholder="Plant Name">
-                <input type="text" id="plantType" placeholder="Plant Type">
-                <input type="number" id="plantAge" placeholder="Plant Age">
-                <input type="text" id="wateringSchedule" placeholder="Watering Schedule">
-                <input type="text" placeholder="additional information" id="plantNotes">
-                <button type="submit" onclick="save_log(event)" id="submitInfo">Add Plant</button>
-                <button id="cancelInfo" onclick="cancel_log()">Cancel</button>
-            </form>
+                <div id="plantInfo" style="display: none;">
+                    <h2 id="Name"></h2>
+                    <p id="Type"></p>
+                    <p id="Age"></p>
+                    <p id="Schedule"></p>
+                    <p id="Notes"></p>
+                    <div id="Records"></div>
+                </div>
 
-            <div id="plantInfo" style="display: none;">
-                <h2>Plant Information</h2>
-                <p id="Name"></p>
-                <p id="Type"></p>
-                <p id="Age"></p>
-                <p id="Schedule"></p>
-                <p id="Notes"></p>
-                <div id="Records"></div>
+                <form id="plantRecord" style="display: none;">
+                    <textarea id="addRecord"></textarea>
+                    <button type="submit" id="addNewRecord">Add</button>
+                    <button id="cancelRecord">Cancel</button>
+                </form>
             </div>
-
-            <form id="plantRecord" style="display: none;">
-                <textarea id="addRecord"></textarea>
-                <button type="submit" id="addNewRecord">Add</button>
-                <button id="cancelRecord">Cancel</button>
-            </form>
         </div>
     </body>
 </html>
